@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DockerComposeEndToEnd.Verifier": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

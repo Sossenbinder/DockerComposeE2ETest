@@ -1,0 +1,35 @@
+version: "3.4"
+
+networks:
+  dockerendtoendtestnetwork: {}
+
+services:
+  dockerendtoendtest.app:
+    build:
+      context: .
+      dockerfile: DockerComposeEndToEnd.App/Dockerfile
+    networks:
+      - dockerendtoendtestnetwork
+    environment:
+      MongoDbEndpoint: "mongodb://dockerendtoendtest.mongodb:27017"
+      ASPNETCORE_URLS: "http://+"
+    depends_on:
+      - dockerendtoendtest.mongodb
+
+  dockerendtoendtest.verifier:
+    build:
+      context: .
+      dockerfile: DockerComposeEndToEnd.Verifier/Dockerfile
+    networks:
+      - dockerendtoendtestnetwork
+    environment:
+      ApiEndpoint: "http://dockerendtoendtest.app"
+      MongoDbEndpoint: "mongodb://dockerendtoendtest.mongodb:27017"
+      OverriddenTodoId: fabe7786-edf3-584d-99d1-d610be383fac
+    depends_on:
+      - dockerendtoendtest.app
+
+  dockerendtoendtest.mongodb:
+    image: mongo
+    networks:
+      - dockerendtoendtestnetwork
